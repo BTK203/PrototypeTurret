@@ -8,15 +8,26 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.InstantCommandZeroTurntable;
+import frc.robot.commands.ToggleCommandSpinShooter;
+import frc.robot.util.Xbox;
 
 /**
- * Add your docs here.
+ * Operator Interface
  */
 public class OI {
     public static final Joystick DRIVER = new Joystick(0);
+    public static final Joystick OPERATOR = new Joystick(1);
 
-    //when button commands are needed...
+    // button commands and dashboard buttons configured here
     public OI() {
+        SmartDashboard.putData("Zero Turntable", new InstantCommandZeroTurntable());
+
+        JoystickButton toggleShooter = new JoystickButton(OPERATOR, Xbox.A);
+            toggleShooter.toggleWhenPressed(new ToggleCommandSpinShooter());
 
     }
 }

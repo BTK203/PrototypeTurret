@@ -20,4 +20,18 @@ public class Constants {
         DRIVE_RIGHT_SLAVE_ID = 2,
         DRIVE_LEFT_MASTER_ID = 3,
         DRIVE_LEFT_SLAVE_ID = 4;
+
+    /**
+     * Turret motor IDs
+     */
+    public static final int
+        TURRET_PITCH_ID = 5,
+        TURRET_YAW_ID = 6,
+        SHOOTER_ID = 7;
+
+    /**
+     * Default Dashboard Values
+     */
+    public static double
+        DEFAULT_SHOOTER_DRIVE_VALUE = 1.0;
 }

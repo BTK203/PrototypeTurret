@@ -7,10 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.SubsystemDrive;
+import frc.robot.subsystems.SubsystemReceiver;
+import frc.robot.subsystems.SubsystemShooter;
+import frc.robot.subsystems.SubsystemTurret;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +27,10 @@ public class Robot extends TimedRobot {
   
   //declare subsystems
   public static SubsystemDrive SUB_DRIVE;
+  public static SubsystemTurret SUB_TURRET;
+  public static SubsystemShooter SUB_SHOOTER;
+  public static SubsystemReceiver SUB_RECIEVER;
+
   public static OI oi;
 
   /**
@@ -30,38 +38,42 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    DriverStation.reportWarning("ROBOT INIT STARTING", false);
+
+    //define subsystems
     SUB_DRIVE = new SubsystemDrive();
-    
+    SUB_TURRET = new SubsystemTurret();
+    SUB_SHOOTER = new SubsystemShooter();
+    SUB_RECIEVER = new SubsystemReceiver();
 
     //OI defined last
     oi = new OI();
+
+    DriverStation.reportWarning("ROBOT INIT DONE", false);
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * Called periodically when robot is on
    */
   @Override
   public void robotPeriodic() {
+    
+    //put subsystems to dashboard
+    SmartDashboard.putData("Drivetrain", SUB_DRIVE);
+    SmartDashboard.putData("Turret", SUB_TURRET);
+    SmartDashboard.putData("Shooter", SUB_SHOOTER);
+
+    //update some values on the dashboard
+    SmartDashboard.putNumber("Turret Yaw", SUB_TURRET.getTurntableEncoderPosition());
+    SmartDashboard.putNumber("Turret Pitch", SUB_TURRET.getElevatorEncoderPosition());
   }
 
   /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
+   * Called when auto starts
    */
   @Override
   public void autonomousInit() {
+    DriverStation.reportWarning("OH LAWD, HE COMIN", false);
   }
 
   /**
@@ -69,6 +81,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    Scheduler.getInstance().run();
   }
 
   /**
@@ -76,6 +89,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    Scheduler.getInstance().run();
   }
 
   /**
@@ -83,5 +97,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    Scheduler.getInstance().run();
   }
 }
