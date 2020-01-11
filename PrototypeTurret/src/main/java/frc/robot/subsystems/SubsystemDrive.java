@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,53 +8,64 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.ManualCommandDrive;
 import frc.robot.util.Xbox;
 
-/**
- * Add your docs here.
- */
-public class SubsystemDrive extends Subsystem {
-
-  private TalonSRX
+public class SubsystemDrive extends SubsystemBase {
+  
+  private TalonSRX 
     rightMaster,
     rightSlave,
     leftMaster,
     leftSlave;
 
-
+  /**
+   * Creates a new SubsystemDrive.
+   */
   public SubsystemDrive() {
     rightMaster = new TalonSRX(Constants.DRIVE_RIGHT_MASTER_ID);
     rightSlave  = new TalonSRX(Constants.DRIVE_RIGHT_SLAVE_ID);
     leftMaster  = new TalonSRX(Constants.DRIVE_LEFT_MASTER_ID);
     leftSlave   = new TalonSRX(Constants.DRIVE_LEFT_SLAVE_ID);
+
+    configureTalons();
   }
 
   @Override
-  public void initDefaultCommand() {
-    setDefaultCommand(new ManualCommandDrive());
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 
-  public void DriveManually(Joystick joy) {
+  public void drive(Joystick joy) {
     double throttle = Xbox.RT(joy) - Xbox.LT(joy);
     double steering = Xbox.LEFT_X(joy);
 
-    double rightDrive = throttle + steering;
-    double leftDrive  = throttle - steering;
+    double right = throttle + steering;
+    double left  = throttle - steering;
 
-    //make sure right and left drive are between -1 and 1
-    rightDrive = (rightDrive > 1 ? 1 : (rightDrive < -1 ? -1 : rightDrive));
-    leftDrive = (leftDrive > 1 ? 1 : (leftDrive < -1 ? -1 : leftDrive));
+    right = (right < -1 ? -1 : (right > 1 ? 1 : right));
+    left = (left < -1 ? -1 : (left > 1 ? 1 : left));
 
-    //set motors
-    rightMaster.set(ControlMode.PercentOutput, rightDrive);
-    rightSlave.set(ControlMode.PercentOutput, rightDrive);
-    leftMaster.set(ControlMode.PercentOutput, leftDrive);
-    leftSlave.set(ControlMode.PercentOutput, leftDrive);
+    rightMaster.set(ControlMode.PercentOutput, right);
+    rightSlave.set(ControlMode.PercentOutput, right);
+    leftMaster.set(ControlMode.PercentOutput, left);
+    leftSlave.set(ControlMode.PercentOutput, left);
+  }
+
+  private void configureTalons() {
+    rightMaster.setInverted(Constants.DRIVE_RIGHT_MASTER_INVERT);
+    rightSlave.setInverted(Constants.DRIVE_RIGHT_SLAVE_INVERT);
+    leftMaster.setInverted(Constants.DRIVE_LEFT_MASTER_INVERT);
+    leftSlave.setInverted(Constants.DRIVE_LEFT_SLAVE_INVERT);
+
+    rightMaster.setNeutralMode(NeutralMode.Brake);
+    rightSlave.setNeutralMode(NeutralMode.Brake);
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    leftSlave.setNeutralMode(NeutralMode.Brake);
   }
 }

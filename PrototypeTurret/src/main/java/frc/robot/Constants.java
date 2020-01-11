@@ -29,9 +29,18 @@ public class Constants {
         TURRET_YAW_ID = 6,
         SHOOTER_ID = 7;
 
+    public static final boolean
+        DRIVE_RIGHT_MASTER_INVERT = true,
+        DRIVE_RIGHT_SLAVE_INVERT  = true,
+        DRIVE_LEFT_MASTER_INVERT  = false,
+        DRIVE_LEFT_SLAVE_INVERT   = false;
+
     /**
      * Default Dashboard Values
      */
-    public static double
-        DEFAULT_SHOOTER_DRIVE_VALUE = 1.0;
+    public static final double
+        DEFAULT_SHOOTER_DRIVE_VALUE = 0.75,
+        DEFAULT_YAW_INHIBITOR = 0.5,
+        DEFAULT_SHOOTER_YAW_LEFT_LIMIT = -1105,
+        DEFAULT_SHOOTER_YAW_RIGHT_LIMIT = 1105;
 }

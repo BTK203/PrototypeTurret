@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,56 +8,79 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.ManualCommandDriveTurret;
+import frc.robot.util.Util;
 import frc.robot.util.Xbox;
 
-/**
- * Add your docs here.
- */
-public class SubsystemTurret extends Subsystem {
+public class SubsystemTurret extends SubsystemBase {
   private TalonSRX
     pitch,
     yaw;
 
+  /**
+   * Creates a new SubsystemTurret.
+   */
   public SubsystemTurret() {
     pitch = new TalonSRX(Constants.TURRET_PITCH_ID);
-    yaw = new TalonSRX(Constants.TURRET_YAW_ID);
+    yaw   = new TalonSRX(Constants.TURRET_YAW_ID);
+
+    configureTalons();
   }
 
   @Override
-  public void initDefaultCommand() {
-    setDefaultCommand(new ManualCommandDriveTurret());
+  public void periodic() {
+    // This method will be called once per scheduler run
+
+    SmartDashboard.putNumber("Yaw Encoder Value", yaw.getSensorCollection().getQuadraturePosition());
+    SmartDashboard.putNumber("Pitch Encoder Value", pitch.getSensorCollection().getQuadraturePosition());
+
+    boolean pitchUpperLimitClosed = pitch.getSensorCollection().isFwdLimitSwitchClosed();
+    if(pitchUpperLimitClosed) {
+      pitch.getSensorCollection().setQuadraturePosition(0, 0);
+    }
+
+    double yawEncoderValue = yaw.getSensorCollection().getQuadraturePosition();
+    SmartDashboard.putBoolean("Yaw RSL", (yawEncoderValue > Util.getAndSetDouble("Yaw Right SL", Constants.DEFAULT_SHOOTER_YAW_RIGHT_LIMIT)));
+    SmartDashboard.putBoolean("Yaw LSL", (yawEncoderValue < Util.getAndSetDouble("Yaw Left SL", Constants.DEFAULT_SHOOTER_YAW_LEFT_LIMIT)));
+    SmartDashboard.putBoolean("Pitch Upper", pitchUpperLimitClosed);
   }
 
-  public void DriveManually(Joystick joy) {
-    double yawDrive = Xbox.RIGHT_X(joy);
+  public void driveTurret(Joystick joy) {
     double pitchDrive = Xbox.RIGHT_Y(joy);
+    double yawDrive   = Xbox.RIGHT_X(joy);
 
-    //do things with soft limits here for yaw, hard limits for pitch
+    //check limits
+    double yawEncoderValue = yaw.getSensorCollection().getQuadraturePosition();
+    double rightSoftLimit = Util.getAndSetDouble("Yaw Right SL", Constants.DEFAULT_SHOOTER_YAW_RIGHT_LIMIT);
+    double leftSoftLimit  = Util.getAndSetDouble("Yaw Left SL", Constants.DEFAULT_SHOOTER_YAW_LEFT_LIMIT);
+    
+    if(yawEncoderValue > rightSoftLimit && yawDrive > 0) 
+      yawDrive = 0;
 
-    //set motors
-    yaw.set(ControlMode.PercentOutput, yawDrive);
+    if(yawEncoderValue < leftSoftLimit && yawDrive < 0) 
+      yawDrive = 0;
+
+    //inhibit the yaw value
+    yawDrive *= Util.getAndSetDouble("Yaw Inhibitor", Constants.DEFAULT_YAW_INHIBITOR);
+
     pitch.set(ControlMode.PercentOutput, pitchDrive);
-  }
-
-  public double getTurntableEncoderPosition() {
-    return yaw.getSensorCollection().getQuadraturePosition();
-  }
-
-  public double getElevatorEncoderPosition() {
-    return pitch.getSensorCollection().getQuadraturePosition();
+    yaw.set(ControlMode.PercentOutput, yawDrive);
   }
 
   public void zeroTurntableEncoder() {
     yaw.getSensorCollection().setQuadraturePosition(0, 0);
   }
 
-  public void  zeroElevatorEncoder() {
-    pitch.getSensorCollection().setQuadraturePosition(0, 0);
+  private void configureTalons() {
+    yaw.setNeutralMode(NeutralMode.Brake);
+    pitch.setNeutralMode(NeutralMode.Brake);
+
+    pitch.setInverted(true);
   }
 }
