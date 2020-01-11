@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.CyborgCommandAlignTurret;
 import frc.robot.commands.ToggleCommandDriveFlywheel;
+import frc.robot.subsystems.SubsystemCompressor;
 import frc.robot.subsystems.SubsystemDrive;
 import frc.robot.subsystems.SubsystemFlywheel;
+import frc.robot.subsystems.SubsystemMagazine;
 import frc.robot.subsystems.SubsystemReceiver;
 import frc.robot.subsystems.SubsystemTurret;
 import frc.robot.util.Xbox;
@@ -30,10 +33,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final SubsystemDrive    SUB_DRIVE    = new SubsystemDrive();
-  private final SubsystemTurret   SUB_TURRET   = new SubsystemTurret();
-  private final SubsystemFlywheel SUB_FLYWHEEL = new SubsystemFlywheel();
-  private final SubsystemReceiver SUB_RECEIVER = new SubsystemReceiver();
+  private final SubsystemDrive      SUB_DRIVE    = new SubsystemDrive();
+  private final SubsystemTurret     SUB_TURRET   = new SubsystemTurret();
+  private final SubsystemFlywheel   SUB_FLYWHEEL = new SubsystemFlywheel();
+  private final SubsystemMagazine   SUB_MAGAZINE = new SubsystemMagazine();
+  private final SubsystemCompressor SUB_COMP     = new SubsystemCompressor();
+  private final SubsystemReceiver   SUB_RECEIVER = new SubsystemReceiver();
 
   private final Joystick DRIVER   = new Joystick(0);
   private final Joystick OPERATOR = new Joystick(1);
@@ -63,13 +68,28 @@ public class RobotContainer {
     );
 
     //button commands
-    JoystickButton toggleFlywheel = new JoystickButton(OPERATOR, Xbox.A);
+    JoystickButton toggleFlywheel = new JoystickButton(OPERATOR, Xbox.Y);
       toggleFlywheel.toggleWhenPressed(new ToggleCommandDriveFlywheel(SUB_FLYWHEEL));
+
+    JoystickButton toggleMagazine = new JoystickButton(OPERATOR, Xbox.A);
+      toggleMagazine.whenPressed(
+        new InstantCommand(() -> SUB_MAGAZINE.toggle(), SUB_MAGAZINE)
+      );
 
     //dashboard buttons
     SmartDashboard.putData(
       "Zero Turntable Encoder",
       new InstantCommand(() -> SUB_TURRET.zeroTurntableEncoder(), SUB_TURRET)
+    );
+
+    SmartDashboard.putData(
+      "Toggle Compressor",
+      new InstantCommand(() -> SUB_COMP.setRunning(!SUB_COMP.getRunning()))
+    );
+
+    SmartDashboard.putData(
+      "Align",
+      new CyborgCommandAlignTurret(SUB_TURRET, SUB_RECEIVER)
     );
   }
 

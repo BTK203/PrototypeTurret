@@ -19,14 +19,15 @@ import frc.robot.util.Util;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SubsystemReceiver extends SubsystemBase {
-  private static String latestSegment;
+  private String latestSegment;
+  private double[] latestData;
 
-  private static Boolean inRange;
+  private Boolean inRange;
 
-  private static DatagramSocket serverSocket;
-  private static byte[]         receiveData;
+  private DatagramSocket serverSocket;
+  private byte[]         receiveData;
 
-  private static long latestTime;
+  private long latestTime;
 
 
   /**
@@ -34,10 +35,12 @@ public class SubsystemReceiver extends SubsystemBase {
    */
   public SubsystemReceiver() {
     latestSegment = "-1,-1,-1,180,180";
+    latestData = new double[] {-1, -1, -1, 180, 180};
     latestTime    = System.currentTimeMillis();
 
     SmartDashboard.putString("RPi Data", latestSegment);
-
+    SmartDashboard.putBoolean("Spotted", false);
+    SmartDashboard.putBoolean("Updated", false);
     inRange = false;
 
     try {
@@ -61,9 +64,14 @@ public class SubsystemReceiver extends SubsystemBase {
           serverSocket.receive(receivePacket); //receive the packet from the Socket
           // DriverStation.reportError("I GOT PI DATA", false);
           String segment = new String(receivePacket.getData()).replaceAll("\\s+",""); //remove whitespace and place data in 'segment'
+          // DriverStation.reportWarning("new data: " + segment, false);
           latestSegment = segment.substring(segment.indexOf(":") + 1, segment.indexOf(";")); // store segment without borders
           latestTime = System.currentTimeMillis(); // add timestamp for stored segment
-          SmartDashboard.putString("RPi Data", segment.substring(segment.indexOf(":") + 1, segment.indexOf(";"))); // put string on dashboard without borders
+          // DriverStation.reportWarning("Seconds since update: " + getSecondsSinceUpdate(), false);
+          String formattedString = segment.substring(segment.indexOf(":") + 1, segment.indexOf(";"));
+          SmartDashboard.putString("RPi Data", formattedString); // put string on dashboard without borders
+          latestData = analyzeData(formattedString);
+
         } catch (IOException e) { //thrown when the socket cannot receive the packet
           DriverStation.reportError("IO EXCEPTION", true);
         }
@@ -76,83 +84,81 @@ public class SubsystemReceiver extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Spotted", targetSpotted());
+    SmartDashboard.putBoolean("Updated", getSecondsSinceUpdate() < 0.5);
+  }
+
+  public double[] getLatestData() {
+    return latestData;
+  }
+
+  public double getDistanceToTarget() {
+    return latestData[2];
+  }
+
+  public double getHorizontalAngleToTarget() {
+    return latestData[3];
+  }
+
+  public double getVerticalAngleToTarget() {
+    return latestData[5];
+  }
+
+  public boolean targetSpotted() {
+    return latestData[2] > -1;
   }
 
   /**
-   * Retrieves the last known pixel coordinates of the target
-   * @return [0] = X-coordinate (in pixels from left)
-   *         [1] = Y-coordinate (in pixels from bottom)
-   *         [2] = Distance (in inches)
-   *         [3] = Angle from center (in degrees; positive = CW)
-   *         {-1,-1,-1,-1} for no known location
+   * Returns the miliseconds since the pi sent the LastKnownLocation
+   * @return ms since last received UDP packet
    */
-  public double[] getLastKnownData() {
-    double[] data = new double[]{-1,-1,-1,180,180};
-    int[] indices = new int[]{2,5,8};
-    try {
-      // indices = IntStream.range(0, latestSegment.length() - 1)
-      //           .filter(i -> latestSegment.charAt(i) == ',')
-      //           .toArray();
-      // data[0] = Integer.parseInt(latestSegment.substring(0, latestSegment.indexOf(",", indices[0])));
-      // data[1] = Integer.parseInt(latestSegment.substring(latestSegment.indexOf(",", indices[0]) + 1, latestSegment.indexOf(",", indices[1])));
-      // data[2] = Integer.parseInt(latestSegment.substring(latestSegment.indexOf(",", indices[1]) + 1, latestSegment.indexOf(",", indices[2])));
-      // data[3] = Integer.parseInt(latestSegment.substring(latestSegment.indexOf(",", indices[2]) + 1));
-      
-      String[] splitInput = latestSegment.split(",");
-      DriverStation.reportWarning("SEGMENTS: " + Integer.valueOf(splitInput.length).toString(), false);
-      data[0] = Integer.parseInt(splitInput[0]);
-      data[1] = Integer.parseInt(splitInput[1]);
-      data[2] = Integer.parseInt(splitInput[2]);
-      data[3] = Integer.parseInt(splitInput[3]) * -1;
-      data[4] = Integer.parseInt(splitInput[4]);
-    } catch (NumberFormatException e) {
-      DriverStation.reportError("NUMBER FORMAT EXCEPTION", true); 
-      DriverStation.reportError("latestSegment = " + latestSegment, false);
-      // DriverStation.reportError("data[0] = " + data[0], false); 
-      // DriverStation.reportError("data[1] = " + data[1], false); 
-      // DriverStation.reportError("data[2] = " + data[2], false); 
-      // DriverStation.reportError("data[3] = " + data[3], false);
-    } catch (StringIndexOutOfBoundsException e) {
-      DriverStation.reportError("STRING INDEX OUT OF BOUNDS EXCEPTION", true);
-      DriverStation.reportError("latestSegment = " + latestSegment, false);
-      // DriverStation.reportError("indices[0] = " + indices[0], false); 
-      // DriverStation.reportError("indices[1] = " + indices[1], false); 
-      // DriverStation.reportError("indices[2] = " + indices[2], false); 
-    } catch (ArrayIndexOutOfBoundsException e) {
-      DriverStation.reportError("ARRAY INDEX OUT OF BOUNDS EXCEPTION", true);
-      DriverStation.reportError("latestSegment = " + latestSegment, false);
-      // DriverStation.reportError("indices[0] = " + indices[0], false); 
-      // DriverStation.reportError("indices[1] = " + indices[1], false); 
-      // DriverStation.reportError("indices[2] = " + indices[2], false); 
-    }
-    updateTargetLock(data);
-    return data;
-}
-
-/**
- * Returns the miliseconds since the pi sent the LastKnownLocation
- * @return ms since last received UDP packet
- */
-public double getSecondsSinceUpdate() {
-  return Util.roundTo((double) ((System.currentTimeMillis() - latestTime) / 1000), 5);
-}
-
-/**
- * If data is being received, records whether or not its in "target lock" range
- * If dats is not being received, the last known state is kept
- */
-public void updateTargetLock( double[] data) {
-  if (data[2] != -1) {
-    inRange = data[2] < 0;
+  public double getSecondsSinceUpdate() {
+    return Util.roundTo((double) ((System.currentTimeMillis() - latestTime) / 1000), 5);
   }
-}
 
-/**
- * Gets the state of target lock
- * @return true if within range, false if out of range
- */
-public Boolean getWithinRange() {
-  return inRange;
-}
-}
+  /**
+   * If data is being received, records whether or not its in "target lock" range
+   * If dats is not being received, the last known state is kept
+   */
+  public void updateTargetLock(double[] data) {
+    if (data[2] != -1) {
+      inRange = data[2] < 0;
+    }
+  }
+
+  /**
+   * Gets the state of target lock
+   * @return true if within range, false if out of range
+   */
+  public Boolean getWithinRange() {
+    return inRange;
+  }
+
+    /**
+     * Retrieves the last known pixel coordinates of the target
+     * @return [0] = X-coordinate (in pixels from left)
+     *         [1] = Y-coordinate (in pixels from bottom)
+     *         [2] = Distance (in inches)
+     *         [3] = Angle from center (in degrees; positive = CW)
+     *         {-1,-1,-1,-1} for no known location
+     */
+    private double[] analyzeData(String input) {
+      double[] newData = {-1, -1, -1, 180, 180};
+      String[] stringData = input.split(",");
+
+      if(stringData.length != 5) {
+        DriverStation.reportWarning("INPUT STRING IMPROPERLY FORMATTED!", true);
+        return newData;
+      }
+
+      try {
+        for(int i=0; i<stringData.length; i++) {
+          newData[i] = Integer.parseInt(stringData[i]);
+        }
+      } catch(Exception ex) {
+        DriverStation.reportWarning("PARSING DATA ERROR: " + ex.getMessage(), true);
+      }
+
+      return newData;
+    }
+  }

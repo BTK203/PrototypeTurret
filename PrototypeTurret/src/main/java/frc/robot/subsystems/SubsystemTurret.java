@@ -73,6 +73,22 @@ public class SubsystemTurret extends SubsystemBase {
     yaw.set(ControlMode.PercentOutput, yawDrive);
   }
 
+  public void driveYaw(double drive) {
+    double yawEncoderValue = yaw.getSensorCollection().getQuadraturePosition();
+    double rightSoftLimit = Util.getAndSetDouble("Yaw Right SL", Constants.DEFAULT_SHOOTER_YAW_RIGHT_LIMIT);
+    double leftSoftLimit  = Util.getAndSetDouble("Yaw Left SL", Constants.DEFAULT_SHOOTER_YAW_LEFT_LIMIT);
+    
+    if(yawEncoderValue < rightSoftLimit || drive < 0) {
+      yaw.set(ControlMode.PercentOutput, drive);
+    }
+
+    if(yawEncoderValue > leftSoftLimit || )
+  }
+
+  public void drivePitch(double drive) {
+    pitch.set(ControlMode.PercentOutput, drive);
+  }
+
   public void zeroTurntableEncoder() {
     yaw.getSensorCollection().setQuadraturePosition(0, 0);
   }

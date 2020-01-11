@@ -29,6 +29,13 @@ public class Constants {
         TURRET_YAW_ID = 6,
         SHOOTER_ID = 7;
 
+    /**
+     * Solenoid IDs
+     */
+    public static final int
+        MAGAZINE_LOADER_ID = 7,
+        MAGAZINE_RESET_ID = 6;
+
     public static final boolean
         DRIVE_RIGHT_MASTER_INVERT = true,
         DRIVE_RIGHT_SLAVE_INVERT  = true,
@@ -42,5 +49,10 @@ public class Constants {
         DEFAULT_SHOOTER_DRIVE_VALUE = 0.75,
         DEFAULT_YAW_INHIBITOR = 0.5,
         DEFAULT_SHOOTER_YAW_LEFT_LIMIT = -1105,
-        DEFAULT_SHOOTER_YAW_RIGHT_LIMIT = 1105;
+        DEFAULT_SHOOTER_YAW_RIGHT_LIMIT = 1105,
+
+        DEFAULT_TURNTABLE_kP = 0,
+        DEFAULT_TURNTABLE_kI = 0,
+        DEFAULT_TURNTABLE_kD = 0,
+        DEFAULT_TURNTABLE_OUTPUT = 0.3;
 }
