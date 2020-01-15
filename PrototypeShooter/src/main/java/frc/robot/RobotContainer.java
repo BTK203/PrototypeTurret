@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.CyborgCommandDriveVelocity;
-import frc.robot.subsystems.SubsystemShooter;
+import frc.robot.subsystems.SubsystemFlywheel;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,7 +23,7 @@ import frc.robot.subsystems.SubsystemShooter;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final SubsystemShooter SUB_SHOOTER = new SubsystemShooter();
+  private final SubsystemFlywheel SUB_FLYWHEEL = new SubsystemFlywheel();
 
   private final Joystick DRIVER = new Joystick(0);
 
@@ -42,20 +42,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /**
-     * Manual commands
-     */
-    SUB_SHOOTER.setDefaultCommand(
-      new RunCommand(() -> SUB_SHOOTER.driveManually(DRIVER), SUB_SHOOTER)
+    //manual commands
+    SUB_FLYWHEEL.setDefaultCommand(
+      new RunCommand(() -> SUB_FLYWHEEL.driveManually(DRIVER), SUB_FLYWHEEL)
     );
 
-    /**
-     * Dashboard buttons
-     */
-    SmartDashboard.putData(
-      "Drive Velocity",
-      new CyborgCommandDriveVelocity(SUB_SHOOTER)
-    );
+    //dashboard buttons
+    SmartDashboard.putData("Run Velocity PID", new CyborgCommandDriveVelocity(SUB_FLYWHEEL));
   }
 
 
@@ -65,7 +58,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return null;
   }
 }

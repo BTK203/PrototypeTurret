@@ -16,19 +16,14 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final int
+        FLYWHEEL_ID = 1;
 
-    /**
-     * Motor IDs
-     */
-    public static final int 
-        SHOOTER_ID = 2;
-
-    /**
-     * PID values
-     */
     public static final double
-        VELOCITY_kP = 0,
-        VELOCITY_kI = 0,
-        VELOCITY_kD = 0,
-        VELOCITY_TARGET = 500;
+        DEFAULT_P = 0.5,
+        DEFAULT_I = 0,
+        DEFAULT_D = 0,
+        DEFAULT_F = 0,
+        DEFAULT_LOWER_LIMIT = -1,
+        DEFAULT_UPPER_LIMIT = 1;
 }
