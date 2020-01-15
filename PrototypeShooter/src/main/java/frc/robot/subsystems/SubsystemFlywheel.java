@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.Util;
 import frc.robot.util.Xbox;
 
 public class SubsystemFlywheel extends SubsystemBase {
@@ -41,6 +42,11 @@ public class SubsystemFlywheel extends SubsystemBase {
 
   public void drivePercent(double output) {
     flywheel.set(output);
+  }
+
+  public void drivePercent() {
+    double percent = Util.getAndSetDouble("Percent Output", 0);
+    flywheel.set(percent);
   }
 
   public double getVelocity() {

@@ -38,6 +38,7 @@ public class CyborgCommandDriveVelocity extends CommandBase {
 
     this.pid = new MiniPID(p, i, d, f);
     pid.setOutputLimits(lowerLimit, upperLimit);
+    pid.setSetpoint(-4500);
     pid.setOutputRampRate(1);
   }
 

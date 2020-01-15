@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.CyborgCommandDriveVelocity;
 import frc.robot.subsystems.SubsystemFlywheel;
+import frc.robot.util.Util;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -49,6 +50,10 @@ public class RobotContainer {
 
     //dashboard buttons
     SmartDashboard.putData("Run Velocity PID", new CyborgCommandDriveVelocity(SUB_FLYWHEEL));
+    SmartDashboard.putData(
+      "Run Manual PO", 
+      new RunCommand(() -> SUB_FLYWHEEL.drivePercent())
+    );
   }
 
 

@@ -17,7 +17,7 @@ package frc.robot;
  */
 public final class Constants {
     public static final int
-        FLYWHEEL_ID = 1;
+        FLYWHEEL_ID = 2;
 
     public static final double
         DEFAULT_P = 0.5,
