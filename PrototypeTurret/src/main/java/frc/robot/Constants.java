@@ -43,6 +43,12 @@ public class Constants {
         DRIVE_LEFT_SLAVE_INVERT   = false;
 
     /**
+     * Turret inverts
+     */
+    public static final boolean
+        TURRET_YAW_INVERT = false;
+
+    /**
      * Default Dashboard Values
      */
     public static final double
@@ -54,5 +60,12 @@ public class Constants {
         DEFAULT_TURNTABLE_kP = 0,
         DEFAULT_TURNTABLE_kI = 0,
         DEFAULT_TURNTABLE_kD = 0,
-        DEFAULT_TURNTABLE_OUTPUT = 0.3;
+        DEFAULT_TURNTABLE_kF = 0,
+        DEFAULT_TURNTABLE_OUTPUT = 0.3,
+
+        DEFAULT_PITCH_kP = 0,
+        DEFAULT_PITCH_kI = 0,
+        DEFAULT_PITCH_kD = 0,
+        DEFAULT_PITCH_kF = 0,
+        DEFAULT_PITCH_OUTPUT = 0.3;
 }

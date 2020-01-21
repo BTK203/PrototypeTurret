@@ -77,16 +77,19 @@ public class SubsystemTurret extends SubsystemBase {
     double yawEncoderValue = yaw.getSensorCollection().getQuadraturePosition();
     double rightSoftLimit = Util.getAndSetDouble("Yaw Right SL", Constants.DEFAULT_SHOOTER_YAW_RIGHT_LIMIT);
     double leftSoftLimit  = Util.getAndSetDouble("Yaw Left SL", Constants.DEFAULT_SHOOTER_YAW_LEFT_LIMIT);
-    
-    if(yawEncoderValue < rightSoftLimit || drive < 0) {
+
+    boolean atRightLimit = (yawEncoderValue >= rightSoftLimit && drive > 0);
+    boolean atLeftLimit = (yawEncoderValue <= leftSoftLimit && drive < 0);
+
+    if(!atRightLimit && !atLeftLimit) {
       yaw.set(ControlMode.PercentOutput, drive);
     }
-
-    if(yawEncoderValue > leftSoftLimit || )
   }
 
   public void drivePitch(double drive) {
     pitch.set(ControlMode.PercentOutput, drive);
+
+    SmartDashboard.putNumber("vertical drive", drive);
   }
 
   public void zeroTurntableEncoder() {
@@ -97,6 +100,7 @@ public class SubsystemTurret extends SubsystemBase {
     yaw.setNeutralMode(NeutralMode.Brake);
     pitch.setNeutralMode(NeutralMode.Brake);
 
-    pitch.setInverted(true);
+    pitch.setInverted(true); //TODO create a constant for this
+    yaw.setInverted(Constants.TURRET_YAW_INVERT);
   }
 }

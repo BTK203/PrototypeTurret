@@ -101,7 +101,7 @@ public class SubsystemReceiver extends SubsystemBase {
   }
 
   public double getVerticalAngleToTarget() {
-    return latestData[5];
+    return latestData[4];
   }
 
   public boolean targetSpotted() {
