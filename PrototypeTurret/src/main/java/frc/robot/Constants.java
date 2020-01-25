@@ -68,4 +68,7 @@ public class Constants {
         DEFAULT_PITCH_kD = 0,
         DEFAULT_PITCH_kF = 0,
         DEFAULT_PITCH_OUTPUT = 0.3;
+
+    public static final int
+        DEFAULT_TURNTABLE_TICKS = 40000;
 }

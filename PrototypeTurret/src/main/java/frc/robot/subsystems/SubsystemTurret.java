@@ -40,6 +40,9 @@ public class SubsystemTurret extends SubsystemBase {
     SmartDashboard.putNumber("Yaw Encoder Value", yaw.getSensorCollection().getQuadraturePosition());
     SmartDashboard.putNumber("Pitch Encoder Value", pitch.getSensorCollection().getQuadraturePosition());
 
+    SmartDashboard.putNumber("Yaw Amps", yaw.getSupplyCurrent());
+    SmartDashboard.putNumber("PitchAmps", pitch.getSupplyCurrent());
+
     boolean pitchUpperLimitClosed = pitch.getSensorCollection().isFwdLimitSwitchClosed();
     if(pitchUpperLimitClosed) {
       pitch.getSensorCollection().setQuadraturePosition(0, 0);
@@ -94,6 +97,36 @@ public class SubsystemTurret extends SubsystemBase {
 
   public void zeroTurntableEncoder() {
     yaw.getSensorCollection().setQuadraturePosition(0, 0);
+  }
+
+  public int getTurntablePosition() {
+    return yaw.getSensorCollection().getQuadraturePosition();
+  }
+
+  public void setTargetTurntablePosition(int position) {
+    yaw.set(ControlMode.Position, position);
+  }
+
+  public void setYawPIDF(double p, double i, double d, double f, double forOutLimit, double revOutLimit) {
+    yaw.config_kP(0, p);
+    yaw.config_kI(0, i);
+    yaw.config_kD(0, d);
+    yaw.config_kF(0, f);
+
+    yaw.configPeakOutputForward(forOutLimit);
+    yaw.configPeakOutputReverse(revOutLimit);
+
+    yaw.configAllowableClosedloopError(0, 0, 0);
+  }
+
+  public void setPitchPIDF(double p, double i, double d, double f, double forOutLimit, double revOutLimit) {
+    pitch.config_kP(0, p);
+    pitch.config_kI(0, i);
+    pitch.config_kD(0, d);
+    pitch.config_kF(0, f);
+
+    pitch.configPeakOutputForward(forOutLimit);
+    pitch.configPeakOutputReverse(revOutLimit);
   }
 
   private void configureTalons() {

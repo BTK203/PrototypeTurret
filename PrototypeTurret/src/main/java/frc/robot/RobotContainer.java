@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CyborgCommandAlignTurret;
+import frc.robot.commands.CyborgCommandSmartAlignTurret;
 import frc.robot.commands.ToggleCommandDriveFlywheel;
 import frc.robot.subsystems.SubsystemCompressor;
 import frc.robot.subsystems.SubsystemDrive;
@@ -36,7 +37,7 @@ public class RobotContainer {
   private final SubsystemDrive      SUB_DRIVE    = new SubsystemDrive();
   private final SubsystemTurret     SUB_TURRET   = new SubsystemTurret();
   private final SubsystemFlywheel   SUB_FLYWHEEL = new SubsystemFlywheel();
-  private final SubsystemMagazine   SUB_MAGAZINE = new SubsystemMagazine();
+  // private final SubsystemMagazine   SUB_MAGAZINE = new SubsystemMagazine();
   private final SubsystemCompressor SUB_COMP     = new SubsystemCompressor();
   private final SubsystemReceiver   SUB_RECEIVER = new SubsystemReceiver();
 
@@ -71,10 +72,10 @@ public class RobotContainer {
     JoystickButton toggleFlywheel = new JoystickButton(OPERATOR, Xbox.Y);
       toggleFlywheel.toggleWhenPressed(new ToggleCommandDriveFlywheel(SUB_FLYWHEEL));
 
-    JoystickButton toggleMagazine = new JoystickButton(OPERATOR, Xbox.A);
-      toggleMagazine.whenPressed(
-        new InstantCommand(() -> SUB_MAGAZINE.toggle(), SUB_MAGAZINE)
-      );
+    // JoystickButton toggleMagazine = new JoystickButton(OPERATOR, Xbox.A);
+    //   toggleMagazine.whenPressed(
+    //     new InstantCommand(() -> SUB_MAGAZINE.toggle(), SUB_MAGAZINE)
+    //   );
 
     //dashboard buttons
     SmartDashboard.putData(
@@ -90,6 +91,11 @@ public class RobotContainer {
     SmartDashboard.putData(
       "Align",
       new CyborgCommandAlignTurret(SUB_TURRET, SUB_RECEIVER)
+    );
+
+    SmartDashboard.putData (
+      "Smart Align",
+      new CyborgCommandSmartAlignTurret(SUB_TURRET, SUB_RECEIVER)
     );
   }
 
