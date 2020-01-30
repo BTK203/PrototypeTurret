@@ -17,7 +17,25 @@ package frc.robot;
  */
 public final class Constants {
     public static final int
-        FLYWHEEL_ID = 2;
+        FLYWHEEL_ID = 5;
+
+    public static final int 
+        ELEVATOR_ID = 1,
+        FEEDER_ID   = 2;
+
+    /**
+     * Inverts
+     */
+    public static final boolean
+        FLYWHEEL_INVERT = false,
+        ELEVATOR_INVERT = false,
+        FEEDER_INVERT = false;
+
+    /**
+     * Amp Limits
+     */
+    public static final int
+        FLYWHEEL_AMP_LIMIT = 50;
 
     public static final double
         DEFAULT_P = 0.5,
@@ -25,5 +43,6 @@ public final class Constants {
         DEFAULT_D = 0,
         DEFAULT_F = 0,
         DEFAULT_LOWER_LIMIT = -1,
-        DEFAULT_UPPER_LIMIT = 1;
+        DEFAULT_UPPER_LIMIT = 1,
+        DEFAULT_VELOCITY = 3000;
 }

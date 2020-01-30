@@ -15,7 +15,6 @@ import frc.robot.util.Util;
 
 public class CyborgCommandDriveVelocity extends CommandBase {
   private SubsystemFlywheel flywheel;
-  private MiniPID pid;
 
   /**
    * Creates a new CyborgCommandDriveVelocity.
@@ -28,25 +27,23 @@ public class CyborgCommandDriveVelocity extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double p = Util.getAndSetDouble("velocity kP", Constants.DEFAULT_P);
-    double i = Util.getAndSetDouble("velocity kI", Constants.DEFAULT_I);
-    double d = Util.getAndSetDouble("velocity kD", Constants.DEFAULT_D);
-    double f = Util.getAndSetDouble("velocity kF", Constants.DEFAULT_F);
+    double p = Util.getAndSetDouble("Velocity kP", Constants.DEFAULT_P);
+    double i = Util.getAndSetDouble("Velocity kI", Constants.DEFAULT_I);
+    double d = Util.getAndSetDouble("Velocity kD", Constants.DEFAULT_D);
+    double f = Util.getAndSetDouble("Velocity kF", Constants.DEFAULT_F);
 
-    double lowerLimit = Util.getAndSetDouble("lower limit", Constants.DEFAULT_LOWER_LIMIT);
-    double upperLimit = Util.getAndSetDouble("upper limit", Constants.DEFAULT_UPPER_LIMIT);
+    double velocity = Util.getAndSetDouble("Velocity Target", Constants.DEFAULT_VELOCITY);
+    double upperOutLimit = Util.getAndSetDouble("Velocity Upper Output", Constants.DEFAULT_UPPER_LIMIT);
+    double lowerOutLimit = Util.getAndSetDouble("Velocity Lower Output", Constants.DEFAULT_LOWER_LIMIT);
 
-    this.pid = new MiniPID(p, i, d, f);
-    pid.setOutputLimits(lowerLimit, upperLimit);
-    pid.setSetpoint(-4500);
-    pid.setOutputRampRate(1);
+    flywheel.setPIDF(p, i, d, f, lowerOutLimit, upperOutLimit);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double drive = pid.getOutput(flywheel.getVelocity());
-    flywheel.drivePercent(drive);
+    double speed = Util.getAndSetDouble("Velocity Target", Constants.DEFAULT_VELOCITY);
+    flywheel.setVelocity(speed);
   }
 
   // Called once the command ends or is interrupted.

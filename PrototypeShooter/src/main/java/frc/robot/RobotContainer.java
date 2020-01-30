@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.CyborgCommandDriveVelocity;
+import frc.robot.subsystems.SubsystemElevator;
 import frc.robot.subsystems.SubsystemFlywheel;
 import frc.robot.util.Util;
 
@@ -25,6 +26,7 @@ import frc.robot.util.Util;
  */
 public class RobotContainer {
   private final SubsystemFlywheel SUB_FLYWHEEL = new SubsystemFlywheel();
+  private final SubsystemElevator SUB_ELEVATOR = new SubsystemElevator();
 
   private final Joystick DRIVER = new Joystick(0);
 
@@ -44,16 +46,18 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //manual commands
-    SUB_FLYWHEEL.setDefaultCommand(
-      new RunCommand(() -> SUB_FLYWHEEL.driveManually(DRIVER), SUB_FLYWHEEL)
+    SUB_ELEVATOR.setDefaultCommand(
+      new RunCommand(() -> SUB_ELEVATOR.driveWithController(DRIVER), SUB_ELEVATOR)
     );
+
+    //button commands
+    
 
     //dashboard buttons
     SmartDashboard.putData("Run Velocity PID", new CyborgCommandDriveVelocity(SUB_FLYWHEEL));
-    SmartDashboard.putData(
-      "Run Manual PO", 
-      new RunCommand(() -> SUB_FLYWHEEL.drivePercent())
-    );
+    SmartDashboard.putData("Run Manual PO", new RunCommand(() -> SUB_FLYWHEEL.drivePercent()));
+
+
   }
 
 

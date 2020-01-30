@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -27,6 +28,8 @@ public class SubsystemFlywheel extends SubsystemBase {
   public SubsystemFlywheel() {
     flywheel = new CANSparkMax(Constants.FLYWHEEL_ID, MotorType.kBrushless);
     flywheel.setIdleMode(IdleMode.kBrake);
+    flywheel.setInverted(Constants.FLYWHEEL_INVERT);
+    flywheel.setSmartCurrentLimit(Constants.FLYWHEEL_AMP_LIMIT);
   }
 
   @Override
@@ -51,5 +54,17 @@ public class SubsystemFlywheel extends SubsystemBase {
 
   public double getVelocity() {
     return flywheel.getEncoder().getVelocity();
+  }
+
+  public void setPIDF(double p, double i, double d, double f, double lowLimit, double highLimit) {
+    flywheel.getPIDController().setP(p, 0);
+    flywheel.getPIDController().setI(i, 0);
+    flywheel.getPIDController().setD(d, 0);
+    flywheel.getPIDController().setFF(f, 0);
+    flywheel.getPIDController().setOutputRange(lowLimit, highLimit);
+  }
+
+  public void setVelocity(double velocity) {
+    flywheel.getPIDController().setReference(velocity, ControlType.kVelocity);
   }
 }
