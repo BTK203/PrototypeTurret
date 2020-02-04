@@ -20,8 +20,8 @@ public final class Constants {
         FLYWHEEL_ID = 5;
 
     public static final int 
-        ELEVATOR_ID = 1,
-        FEEDER_ID   = 2;
+        PITCH_ID = 2,
+        FEEDER_ID   = 3;
 
     /**
      * Inverts
@@ -37,6 +37,9 @@ public final class Constants {
     public static final int
         FLYWHEEL_AMP_LIMIT = 50;
 
+    /**
+     * Dashboard values
+     */
     public static final double
         DEFAULT_P = 0.5,
         DEFAULT_I = 0,
@@ -45,4 +48,10 @@ public final class Constants {
         DEFAULT_LOWER_LIMIT = -1,
         DEFAULT_UPPER_LIMIT = 1,
         DEFAULT_VELOCITY = 3000;
+
+    /**
+     * Misc
+     */
+    public static final double
+        FLYWHEEL_GEAR_RATIO = 1.6071;
 }

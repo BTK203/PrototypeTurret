@@ -8,20 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SubsystemFeeder;
-import frc.robot.util.Util;
+import frc.robot.subsystems.SubsystemFlywheel;
 
-public class ButtonCommandSpinFeeder extends CommandBase {
-  private SubsystemFeeder feeder;
-  private int inhibitor;
+public class ToggleCommandFlywheelPercentOutput extends CommandBase {
+  private SubsystemFlywheel flywheel;
 
   /**
-   * Creates a new ButtonCommandSpinFeeder.
+   * Creates a new ToggleCommandFlywheelPercentOutput.
    */
-  public ButtonCommandSpinFeeder(SubsystemFeeder feeder, int inhibitor) {
-    this.feeder = feeder;
-    this.inhibitor = inhibitor;
-    addRequirements(this.feeder);
+  public ToggleCommandFlywheelPercentOutput(SubsystemFlywheel flywheel) {
+    this.flywheel = flywheel;
+    addRequirements(flywheel);
   }
 
   // Called when the command is initially scheduled.
@@ -32,14 +29,13 @@ public class ButtonCommandSpinFeeder extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double value = Util.getAndSetDouble("Feeder Drive", 1) * inhibitor;
-    feeder.drivePercent(value);
+    this.flywheel.drivePercent();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    feeder.drivePercent(0);
+    this.flywheel.drivePercent(0);
   }
 
   // Returns true when the command should end.

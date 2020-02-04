@@ -12,6 +12,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,33 +36,59 @@ public class SubsystemFlywheel extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double flywheelRPM = Math.abs(flywheel.getEncoder().getVelocity() * Constants.FLYWHEEL_GEAR_RATIO);
+    double targetRPM = Util.getAndSetDouble("Velocity Target", 1000);
+
     SmartDashboard.putNumber("Velocity", flywheel.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Flywheel RPM", flywheelRPM);
+
+    SmartDashboard.putBoolean(
+      "RPM Limit Hit",
+      flywheelRPM > Util.getAndSetDouble("RPM Limit", 1000)
+    );
+
+    double flywheelError = Math.abs(flywheelRPM - Math.abs(targetRPM));
+    SmartDashboard.putNumber("Flywheel RPM Error", flywheelError);
+    SmartDashboard.putBoolean("RPM Stable", flywheelError <= 50);
+
+    SmartDashboard.putNumber("Flywheel Amps", flywheel.getOutputCurrent());
+    SmartDashboard.putNumber("Flywheel Drive", Math.abs(flywheel.getAppliedOutput() * 100));
   }
 
   public void driveManually(Joystick joy) {
     double drive = Xbox.RIGHT_X(joy);
-    flywheel.set(drive);
+    drivePercent(drive);
   }
 
   public void drivePercent(double output) {
-    flywheel.set(output);
+
+    //rpm limit
+    double rpmLimit = Util.getAndSetDouble("RPM Limit", 1000) / Constants.FLYWHEEL_GEAR_RATIO;
+    if(Math.abs(flywheel.getEncoder().getVelocity()) > rpmLimit) {
+      flywheel.set(0);
+      DriverStation.reportWarning("HIT RPM LIMIT", false);
+    } else {
+      flywheel.set(output);
+    }
   }
 
   public void drivePercent() {
     double percent = Util.getAndSetDouble("Percent Output", 0);
-    flywheel.set(percent);
+    drivePercent(percent);
   }
 
   public double getVelocity() {
     return flywheel.getEncoder().getVelocity();
   }
 
-  public void setPIDF(double p, double i, double d, double f, double lowLimit, double highLimit) {
+  public void setPIDF(double p, double i, double d, double f, double lowLimit, double highLimit, double izone) {
     flywheel.getPIDController().setP(p, 0);
     flywheel.getPIDController().setI(i, 0);
     flywheel.getPIDController().setD(d, 0);
     flywheel.getPIDController().setFF(f, 0);
     flywheel.getPIDController().setOutputRange(lowLimit, highLimit);
+
+    flywheel.getPIDController().setIZone(izone, 0);
   }
 
   public void setVelocity(double velocity) {

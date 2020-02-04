@@ -32,23 +32,26 @@ public class CyborgCommandDriveVelocity extends CommandBase {
     double d = Util.getAndSetDouble("Velocity kD", Constants.DEFAULT_D);
     double f = Util.getAndSetDouble("Velocity kF", Constants.DEFAULT_F);
 
-    double velocity = Util.getAndSetDouble("Velocity Target", Constants.DEFAULT_VELOCITY);
     double upperOutLimit = Util.getAndSetDouble("Velocity Upper Output", Constants.DEFAULT_UPPER_LIMIT);
     double lowerOutLimit = Util.getAndSetDouble("Velocity Lower Output", Constants.DEFAULT_LOWER_LIMIT);
 
-    flywheel.setPIDF(p, i, d, f, lowerOutLimit, upperOutLimit);
+    double izone = Util.getAndSetDouble("IZone", 100);
+
+    flywheel.setPIDF(p, i, d, f, lowerOutLimit, upperOutLimit, izone);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = Util.getAndSetDouble("Velocity Target", Constants.DEFAULT_VELOCITY);
+    double speed = Util.getAndSetDouble("Velocity Target", Constants.DEFAULT_VELOCITY) / Constants.FLYWHEEL_GEAR_RATIO;
     flywheel.setVelocity(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    flywheel.setVelocity(0);
+    flywheel.drivePercent(0);
   }
 
   // Returns true when the command should end.

@@ -13,10 +13,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ButtonCommandSpinFeeder;
 import frc.robot.commands.CyborgCommandDriveVelocity;
+import frc.robot.commands.ToggleCommandFlywheelPercentOutput;
 import frc.robot.subsystems.SubsystemElevator;
+import frc.robot.subsystems.SubsystemFeeder;
 import frc.robot.subsystems.SubsystemFlywheel;
 import frc.robot.util.Util;
+import frc.robot.util.Xbox;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -27,6 +32,7 @@ import frc.robot.util.Util;
 public class RobotContainer {
   private final SubsystemFlywheel SUB_FLYWHEEL = new SubsystemFlywheel();
   private final SubsystemElevator SUB_ELEVATOR = new SubsystemElevator();
+  private final SubsystemFeeder   SUB_FEEDER   = new SubsystemFeeder();
 
   private final Joystick DRIVER = new Joystick(0);
 
@@ -51,11 +57,18 @@ public class RobotContainer {
     );
 
     //button commands
-    
+    JoystickButton startPercentOutput = new JoystickButton(DRIVER, Xbox.START);
+      startPercentOutput.toggleWhenPressed(new ToggleCommandFlywheelPercentOutput(SUB_FLYWHEEL));
+
+    JoystickButton driveFeeder = new JoystickButton(DRIVER, Xbox.A);
+      driveFeeder.whileHeld(new ButtonCommandSpinFeeder(SUB_FEEDER, 1));
+
+    JoystickButton driveFeederBackward = new JoystickButton(DRIVER, Xbox.X);
+      driveFeederBackward.whileHeld(new ButtonCommandSpinFeeder(SUB_FEEDER, -1));
 
     //dashboard buttons
     SmartDashboard.putData("Run Velocity PID", new CyborgCommandDriveVelocity(SUB_FLYWHEEL));
-    SmartDashboard.putData("Run Manual PO", new RunCommand(() -> SUB_FLYWHEEL.drivePercent()));
+    SmartDashboard.putData("Run Manual PO", new ToggleCommandFlywheelPercentOutput(SUB_FLYWHEEL));
 
 
   }
