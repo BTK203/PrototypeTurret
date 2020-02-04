@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -96,6 +98,11 @@ public class RobotContainer {
     SmartDashboard.putData (
       "Smart Align",
       new CyborgCommandSmartAlignTurret(SUB_TURRET, SUB_RECEIVER)
+    );
+    
+    SmartDashboard.putData (
+      "Reset NavX Yaw",
+      new InstantCommand(() -> SUB_DRIVE.resetSensor(), SUB_DRIVE)
     );
   }
 

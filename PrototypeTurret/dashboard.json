@@ -168,8 +168,7 @@
               "Graph/Visible time": 30.0,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Visible data/SmartDashboard/horizontal drive": true
+              "Y-axis/Lower bound": -1.0
             }
           },
           "0,0": {
@@ -196,8 +195,7 @@
               "Graph/Visible time": 30.0,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Visible data/SmartDashboard/Vertical drive": true
+              "Y-axis/Lower bound": -1.0
             }
           },
           "8,0": {
@@ -222,6 +220,98 @@
               "_title": "Stable",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Smart Align",
+              "_title": "Smart Align"
+            }
+          },
+          "9,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Yaw Amps",
+              "_title": "Yaw Amps"
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PitchAmps",
+              "_title": "PitchAmps"
+            }
+          },
+          "9,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/NavX Calibrating",
+              "_title": "NavX Calibrating",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/NavX Connected",
+              "_title": "NavX Connected",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Displacement X",
+              "_title": "NavX Displacement X"
+            }
+          },
+          "2,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Displacement Y",
+              "_title": "NavX Displacement Y"
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Displacement Z",
+              "_title": "NavX Displacement Z"
             }
           }
         }
@@ -327,6 +417,15 @@
                   "_title": "Solenoid[0,6]/Value",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Gyro",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor",
+                  "_title": "navX-Sensor",
+                  "Visuals/Major tick spacing": 45.0,
+                  "Visuals/Starting angle": 180.0,
+                  "Visuals/Show tick mark ring": true,
+                  "Visuals/Counter clockwise": false
                 }
               ]
             }
@@ -356,8 +455,176 @@
               "Graph/Visible time": 30.0,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Visible data/SmartDashboard/vertical drive": true
+              "Y-axis/Lower bound": -1.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "NavX",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 96.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Angle",
+              "_title": "SmartDashboard/NavX Angle"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/NavX Calibrating",
+              "_title": "SmartDashboard/NavX Calibrating",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/NavX Connected",
+              "_title": "SmartDashboard/NavX Connected",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Position",
+              "Layout/Number of columns": 3,
+              "Layout/Number of rows": 3,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/NavX Displacement X",
+                  "_title": "SmartDashboard/NavX Displacement X"
+                },
+                "1,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/NavX Displacement Y",
+                  "_title": "SmartDashboard/NavX Displacement Y"
+                },
+                "2,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/NavX Displacement Z",
+                  "_title": "SmartDashboard/NavX Displacement Z"
+                }
+              }
+            }
+          },
+          "0,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Velocity",
+              "Layout/Number of columns": 3,
+              "Layout/Number of rows": 3,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,1": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/NavX Velocity X",
+                  "_title": "SmartDashboard/NavX Velocity X"
+                },
+                "1,1": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/NavX Velocity Y",
+                  "_title": "SmartDashboard/NavX Velocity Y"
+                },
+                "2,1": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/NavX Velocity Z",
+                  "_title": "SmartDashboard/NavX Velocity Z"
+                }
+              }
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Roll",
+              "_title": "SmartDashboard/NavX Roll"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Real Angle",
+              "_title": "SmartDashboard/NavX Real Angle"
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Reset NavX Yaw",
+              "_title": "SmartDashboard/Reset NavX Yaw"
+            }
+          },
+          "6,0": {
+            "size": [
+              6,
+              3
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor",
+              "_title": "LiveWindow/Ungrouped/navX-Sensor",
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "4,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavX Temp",
+              "_title": "SmartDashboard/NavX Temp"
             }
           }
         }

@@ -10,8 +10,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.Xbox;
@@ -24,6 +27,8 @@ public class SubsystemDrive extends SubsystemBase {
     leftMaster,
     leftSlave;
 
+  private AHRS navX;
+
   /**
    * Creates a new SubsystemDrive.
    */
@@ -34,11 +39,31 @@ public class SubsystemDrive extends SubsystemBase {
     leftSlave   = new TalonSRX(Constants.DRIVE_LEFT_SLAVE_ID);
 
     configureTalons();
+
+    navX = new AHRS(SerialPort.Port.kUSB);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    SmartDashboard.putBoolean("NavX Calibrating", navX.isCalibrating());
+    SmartDashboard.putBoolean("NavX Connected", navX.isConnected());
+    SmartDashboard.putNumber("NavX Displacement X", navX.getDisplacementX() * 39.372);
+    SmartDashboard.putNumber("NavX Displacement Y", navX.getDisplacementY() * 39.372);
+    SmartDashboard.putNumber("NavX Displacement Z", navX.getDisplacementZ() * 39.372);
+    SmartDashboard.putNumber("NavX Velocity X", navX.getVelocityX());
+    SmartDashboard.putNumber("NavX Velocity Y", navX.getVelocityY());
+    SmartDashboard.putNumber("NavX Velocity Z", navX.getVelocityZ());
+    SmartDashboard.putNumber("NavX Roll", navX.getRoll());
+    SmartDashboard.putNumber("NavX Real Angle", navX.getAngle());
+    SmartDashboard.putNumber("NavX Angle", navX.getCompassHeading());
+    SmartDashboard.putNumber("NavX Temp", navX.getTempC());
+  }
+
+  public void resetSensor() {
+    navX.reset();
+    navX.resetDisplacement();
   }
 
   public void drive(Joystick joy) {

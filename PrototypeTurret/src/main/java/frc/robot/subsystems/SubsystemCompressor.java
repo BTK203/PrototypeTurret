@@ -19,7 +19,7 @@ public class SubsystemCompressor extends SubsystemBase {
    */
   public SubsystemCompressor() {
     comp = new Compressor();
-    comp.start();
+    comp.stop(); //comp.start();
   }
 
   @Override
