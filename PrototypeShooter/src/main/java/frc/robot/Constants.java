@@ -17,10 +17,11 @@ package frc.robot;
  */
 public final class Constants {
     public static final int
-        FLYWHEEL_ID = 5;
+        FLYWHEEL_ID = 0;
 
     public static final int 
-        PITCH_ID = 2,
+        YAW_ID      = 1,
+        PITCH_ID    = 2,
         FEEDER_ID   = 3;
 
     /**
