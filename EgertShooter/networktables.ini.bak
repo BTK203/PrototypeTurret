@@ -1,0 +1,18 @@
+[NetworkTables Storage 3.0]
+string "/Preferences/.type"="RobotPreferences"
+double "/Preferences/FW Velocity IZone"=100
+double "/Preferences/FW Velocity kD"=0
+double "/Preferences/FW Velocity kF"=0.000185
+double "/Preferences/FW Velocity kI"=5e-06
+double "/Preferences/FW Velocity kP"=0.0014
+double "/Preferences/Pitch Position IZone"=75
+double "/Preferences/Pitch Position kD"=0
+double "/Preferences/Pitch Position kF"=0
+double "/Preferences/Pitch Position kI"=0
+double "/Preferences/Pitch Position kP"=0
+double "/Preferences/Vision multiplier"=1
+double "/Preferences/Yaw Position IZone"=100000
+double "/Preferences/Yaw Position KD"=0
+double "/Preferences/Yaw Position KF"=0
+double "/Preferences/Yaw Position kI"=0.001
+double "/Preferences/Yaw Position kP"=0.004
