@@ -20,27 +20,30 @@ public final class Constants {
      * Motor IDs
      */
     public static final int
-        PITCH_ID = 0,
+        PITCH_ID = 3,
         YAW_ID = 1,
-        FLYWHEEL_ID = 2;
+        FLYWHEEL_ID = 2,
+        FEEDER_ID = 4;
 
     /**
      * Inhibitors
      */
     public static final double 
-        YAW_INHIBITOR = 0.05,
+        YAW_INHIBITOR = 0.2,
         PITCH_INHIBITOR = 0.5,
-        FLYWHEEL_INHIBITOR = 1;
+        FLYWHEEL_INHIBITOR = 1,
+        FEEDER_INHIBITOR = 1;
 
     /**
      * Inverts
      */
     public static final boolean
-        YAW_INVERT = false,
+        YAW_INVERT = true,
         PITCH_INVERT = false,
-        FLYWHEEL_INVERT = true;
+        FLYWHEEL_INVERT = true,
+        FEEDER_INVERT = true;
 
-    public static final double 
+    public static final double
         FLYWHEEL_GEAR_RATIO = 1.6071;
 
     public static final int

@@ -38,6 +38,8 @@ public class CyborgCommandFlywheelVelocity extends CommandBase {
 
     flywheel.setPIDF(p, i, d, f, izone);
 
+
+
     SmartDashboard.putBoolean("Drive FW Velocity", true);
   }
 
@@ -46,6 +48,10 @@ public class CyborgCommandFlywheelVelocity extends CommandBase {
   public void execute() {
     double speed = Util.getAndSetDouble("FW Velocity Target", 3000) / Constants.FLYWHEEL_GEAR_RATIO;
     flywheel.setVelocity(speed);
+
+    DriverStation.reportWarning("FLYWHEEL RUNNING", false);
+
+    SmartDashboard.putNumber("FW RPM", flywheel.getVelocity());
   }
 
   // Called once the command ends or is interrupted.

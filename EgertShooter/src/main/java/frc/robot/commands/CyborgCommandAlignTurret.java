@@ -71,7 +71,7 @@ public class CyborgCommandAlignTurret extends CommandBase {
     double horizontalAngle = kiwilight.getHorizontalAngleToTarget() * -1;
     horizontalAngle *= Util.getAndSetDouble("Vision multiplier", 1);
 
-    double horizontalPosition = turret.getYawPosition() * -1;
+    double horizontalPosition = turret.getYawPosition();
     double horizontalTicks = turret.getYawTicks();
     double targetDistance = kiwilight.getDistanceToTarget();
 
@@ -83,7 +83,7 @@ public class CyborgCommandAlignTurret extends CommandBase {
       SmartDashboard.putNumber("H Ticks To Turn", horizontalTicksToTurn);
       SmartDashboard.putNumber("Yaw Ticks To Turn", horizontalTicksToTurn);
 
-      double newTargetPosition = (turret.getYawPosition() * -1) + horizontalTicksToTurn;
+      double newTargetPosition = horizontalPosition + horizontalTicksToTurn;
       turret.setYawPosition((int) newTargetPosition);
 
       yawAligned = Math.abs(newTargetPosition - horizontalPosition) < Constants.YAW_ALLOWABLE_ERROR;
@@ -101,7 +101,7 @@ public class CyborgCommandAlignTurret extends CommandBase {
         //equation: f(x) = 0.006851x^2 - 2.654x - 447.8 | where: x is the distance kiwilight reports and f returns the pitch position.
         double ax2 = 0.006851 * Math.pow(targetDistance, 2);
         double bx  = -2.654 * targetDistance;
-        double c   = -475.8;
+        double c   = -375;
 
         newPitchPosition = ax2 + bx + c;
         newPitchPosition += Util.getAndSetDouble("Align Degree Boost", 50);

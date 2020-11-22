@@ -10,11 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ButtonCommandFeed;
 import frc.robot.commands.CyborgCommandAlignTurret;
 import frc.robot.commands.CyborgCommandFlywheelVelocity;
+import frc.robot.subsystems.SubsystemFeeder;
 import frc.robot.subsystems.SubsystemFlywheel;
 import frc.robot.subsystems.SubsystemReceiver;
 import frc.robot.subsystems.SubsystemTurret;
@@ -27,6 +30,7 @@ import frc.robot.util.Xbox;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final SubsystemFeeder feeder = new SubsystemFeeder();
   private final SubsystemTurret turret = new SubsystemTurret();
   private final SubsystemFlywheel flywheel = new SubsystemFlywheel();
   private final SubsystemReceiver kiwilight = new SubsystemReceiver();
@@ -60,12 +64,24 @@ public class RobotContainer {
 
     JoystickButton toggleAlign = new JoystickButton(operator, Xbox.RB);
       toggleAlign.toggleWhenPressed(new CyborgCommandAlignTurret(turret, kiwilight));
+
+    JoystickButton feed = new JoystickButton(operator, Xbox.A);
+      feed.whileHeld(new ButtonCommandFeed(feeder));
+
+    SmartDashboard.putData(
+      "Zero",
+      new RunCommand(
+        () -> {
+          turret.zero();
+        },
+        turret
+      )
+    );
   }
 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {

@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.Xbox;
@@ -36,11 +37,16 @@ public class SubsystemTurret extends SubsystemBase {
 
     yawTicks = Constants.DEFAULT_YAW_TICKS;
     pitchTicks = Constants.DEFAULT_PITCH_TICKS;
+
+    yaw.setSensorPhase(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    SmartDashboard.putNumber("Pitch Ticks", pitch.getSensorCollection().getQuadraturePosition());
+    SmartDashboard.putNumber("Yaw Ticks", yaw.getSensorCollection().getQuadraturePosition());
   }
 
   public void drive(Joystick joy) {
@@ -80,6 +86,11 @@ public class SubsystemTurret extends SubsystemBase {
 
   public int getPitchTicks() {
     return pitchTicks;
+  }
+
+  public void zero() {
+    pitch.getSensorCollection().setQuadraturePosition(0, 0);
+    yaw.getSensorCollection().setQuadraturePosition(0, 0);
   }
 
   public void setYawPIDF(double p, double i, double d, double f, int izone) {
